@@ -46,4 +46,6 @@ def remove_bg():
     return jsonify({"edited_image_url": edited_image_url})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Bind to the PORT environment variable or use 5000 as a default
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
