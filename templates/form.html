@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Background</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Remove Background from Image</h2>
+        <form id="imageForm" class="mt-4">
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload Image</label>
+                <input type="file" class="form-control" id="image" name="image" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Remove Background</button>
+        </form>
+
+        <div id="result" class="mt-5 text-center" style="display: none;">
+            <h5>Edited Image:</h5>
+            <img id="editedImage" src="" class="img-fluid" alt="Edited Image">
+            <a id="downloadLink" href="" class="btn btn-success mt-3" download>Download Image</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const form = document.getElementById('imageForm');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            const fileInput = document.getElementById('image');
+            const file = fileInput.files[0];
+            formData.append('image', file);
+
+            // Send the image to the backend API (hosted on Render)
+            const response = await fetch('https://your-render-backend-url.com/remove-bg', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                document.getElementById('editedImage').src = result.edited_image_url;
+                document.getElementById('downloadLink').href = result.edited_image_url;
+                document.getElementById('result').style.display = 'block';
+            } else {
+                alert('Failed to process image. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
